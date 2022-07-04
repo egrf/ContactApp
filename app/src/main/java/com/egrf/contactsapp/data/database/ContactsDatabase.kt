@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.egrf.contactsapp.data.database.dao.ContactDao
 import com.egrf.contactsapp.domain.entity.Contact
 
 @Database(
@@ -15,8 +16,10 @@ import com.egrf.contactsapp.domain.entity.Contact
 @TypeConverters(TypeConverter::class)
 abstract class ContactsDatabase : RoomDatabase() {
 
+    abstract fun contactDao(): ContactDao
+
     companion object {
-        const val CONTACTS_DB = "contacts_database"
+        private const val CONTACTS_DB = "contacts_database"
 
         @Volatile
         private var INSTANCE: ContactsDatabase? = null

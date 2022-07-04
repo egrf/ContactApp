@@ -12,8 +12,12 @@ task clean(type: Delete) {
 ext {
     versions = [
             room: '2.4.2',
-            rxJava: '3.1.5',
+            rxJava: '2.2.21',
+            rxAndroid: '2.1.1',
             gson: '2.9.0',
-            joda: '2.10.14'
+            joda: '2.10.14',
+            retrofit: '2.9.0',
+            dagger: '2.42',
+            okhttp: '4.10.0'
     ]
 }

@@ -10,7 +10,7 @@ import java.io.Serializable
 @Entity(tableName = "contact_table")
 data class Contact(
     @PrimaryKey
-    val id: Int = -1,
+    val id: String = "-1",
     @SerializedName("name")
     val name: String? = null,
     @SerializedName("height")
