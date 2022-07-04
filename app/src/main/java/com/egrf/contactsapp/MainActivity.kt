@@ -2,7 +2,7 @@ package com.egrf.contactsapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.egrf.contactsapp.ui.main.MainFragment
+import com.egrf.contactsapp.ui.features.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

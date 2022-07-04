@@ -1,4 +1,4 @@
-package com.egrf.contactsapp.ui.main
+package com.egrf.contactsapp.ui.features.main
 
 import android.os.Bundle
 import android.view.*
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.egrf.contactsapp.R
 import com.egrf.contactsapp.databinding.FragmentMainBinding
+import com.egrf.contactsapp.ui.di.Injector
 
 class MainFragment : Fragment() {
 
@@ -15,6 +16,11 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: FragmentMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Injector.mainFragmentComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
