@@ -1,6 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+
 }
 
 android {
@@ -36,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
@@ -47,4 +50,15 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    //Room
+    implementation("androidx.room:room-runtime:$versions.room")
+    annotationProcessor("androidx.room:room-compiler:$versions.room")
+    kapt("androidx.room:room-compiler:$versions.room")
+    implementation("androidx.room:room-rxjava2:$versions.room")
+    //rxJava
+    implementation "io.reactivex.rxjava2:rxjava:$versions.rxJava"
+    //Gson
+    implementation "com.google.code.gson:gson:$versions.gson"
+    //Joda time
+    implementation "net.danlew:android.joda:$versions.joda"
 }
