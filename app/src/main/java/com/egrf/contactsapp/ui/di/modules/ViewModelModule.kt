@@ -15,8 +15,9 @@ abstract class ViewModelModule {
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(MainViewModel::class)
-//    internal abstract fun bindsMainViewModel(viewModel: MainViewModel): ViewModel
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun bindsMainViewModel(viewModel: MainViewModel): ViewModel
+
 }

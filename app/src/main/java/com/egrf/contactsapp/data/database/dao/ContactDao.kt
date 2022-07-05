@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.egrf.contactsapp.domain.entity.Contact
-import io.reactivex.Single
+import io.reactivex.Observable
 
 @Dao
 interface ContactDao {
@@ -14,10 +14,7 @@ interface ContactDao {
     fun saveContacts(contacts: List<Contact>)
 
     @Query("SELECT * FROM contact_table ORDER BY id ASC")
-    fun getAllContacts(): Single<List<Contact>>
-
-    @Query("SELECT * FROM contact_table WHERE id = :contactId")
-    fun getContactById(contactId: String): Single<Contact>
+    fun getAllContacts(): Observable<List<Contact>>
 
     @Query("DELETE FROM contact_table")
     fun clearAll()

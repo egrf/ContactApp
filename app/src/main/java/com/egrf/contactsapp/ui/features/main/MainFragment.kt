@@ -2,19 +2,13 @@ package com.egrf.contactsapp.ui.features.main
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.egrf.contactsapp.R
 import com.egrf.contactsapp.databinding.FragmentMainBinding
 import com.egrf.contactsapp.ui.di.Injector
+import com.egrf.contactsapp.ui.features.base.BaseFragment
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment<MainViewModel>() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
-    private lateinit var viewModel: MainViewModel
     private lateinit var binding: FragmentMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,13 +26,26 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        binding.button.setOnClickListener { viewModel.loadContacts() }
         // TODO: Use the ViewModel
+        viewModel.contacts.observe(this.viewLifecycleOwner) { contact ->
+            run {
+                binding.button.text = contact.size.toString()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    companion object {
+        fun newInstance() = MainFragment()
+    }
+
+    override fun injectViewModel() {
+        viewModel = getViewModel()
     }
 
 }
