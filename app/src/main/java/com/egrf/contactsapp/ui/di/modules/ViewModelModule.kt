@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.egrf.contactsapp.ui.di.ViewModelFactory
 import com.egrf.contactsapp.ui.di.annotations.ViewModelKey
+import com.egrf.contactsapp.ui.features.details.ContactDetailsViewModel
 import com.egrf.contactsapp.ui.features.main.MainViewModel
 import dagger.Binds
 import dagger.Module
@@ -19,5 +20,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     internal abstract fun bindsMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ContactDetailsViewModel::class)
+    internal abstract fun bindsContactDetailsViewModel(viewModel: ContactDetailsViewModel): ViewModel
 
 }

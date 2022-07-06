@@ -5,6 +5,7 @@ import com.egrf.contactsapp.data.network.ContactsApi
 import com.egrf.contactsapp.domain.entity.Contact
 import com.egrf.contactsapp.domain.repository.IContactRepository
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -17,10 +18,12 @@ class ContactRepository @Inject constructor(
 
     private val subject = BehaviorSubject.create<List<Contact>>()
 
-    fun clearContacts() = run {
+    fun clearContacts() = Single.just {
         subject.onNext(emptyList())
         dataBase.contactDao().clearAll()
     }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
     private fun onNext(contacts: List<Contact>) {
         subject.onNext(contacts)
@@ -38,9 +41,6 @@ class ContactRepository @Inject constructor(
         ) { questions, answers, favorites ->
             saveContacts(questions, answers, favorites)
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-
     }
 
     private fun saveContacts(

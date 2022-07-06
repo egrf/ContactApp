@@ -13,6 +13,8 @@ data class Contact(
     val id: String = "-1",
     @SerializedName("name")
     val name: String? = null,
+    @SerializedName("phone")
+    val phone: String? = null,
     @SerializedName("height")
     val height: Float? = null,
     @SerializedName("biography")

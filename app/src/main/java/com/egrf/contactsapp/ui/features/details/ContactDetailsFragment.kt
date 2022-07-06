@@ -1,0 +1,73 @@
+package com.egrf.contactsapp.ui.features.details
+
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.egrf.contactsapp.databinding.FragmentContactDetailsBinding
+import com.egrf.contactsapp.domain.entity.Contact
+import com.egrf.contactsapp.ui.di.Injector
+import com.egrf.contactsapp.ui.extensions.EMPTY
+import com.egrf.contactsapp.ui.features.base.BaseFragment
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat.forPattern
+
+
+class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
+
+    private var contact: Contact? = null
+    private lateinit var binding: FragmentContactDetailsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Injector.contactDetailsFragmentComponent.inject(this)
+        requireActivity().actionBar?.setDisplayHomeAsUpEnabled(true)
+        arguments?.let {
+            contact = it.getSerializable(CONTACT_PARAM) as Contact
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentContactDetailsBinding.inflate(inflater, container, false)
+        binding.name.text = contact?.name
+        binding.phone.text = contact?.phone
+        binding.phone.setOnClickListener {
+            createDialIntentAndStart()
+        }
+        binding.temperament.text = contact?.temperament.toString()
+        val educationPeriod =
+            "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
+        binding.educationPeriod.text = educationPeriod
+        binding.biography.text = contact?.biography
+        return binding.root
+    }
+
+    private fun createDialIntentAndStart() {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:${preparePhoneNumber(contact?.phone)}")
+        startActivity(intent)
+    }
+
+    private fun formatDate(date: DateTime?) =
+        forPattern("dd.MM.yyyy").print(date) ?: ""
+
+    private fun preparePhoneNumber(phoneNumber: String?) =
+        phoneNumber?.let {
+            Regex(PHONE_REGEX).replace(phoneNumber, "")
+        } ?: String.EMPTY
+
+    override fun injectViewModel() {
+        viewModel = getViewModel()
+    }
+
+    companion object {
+        private const val PHONE_REGEX = "[^0-9]"
+        const val CONTACT_PARAM = "CONTACT_PARAM"
+    }
+
+}

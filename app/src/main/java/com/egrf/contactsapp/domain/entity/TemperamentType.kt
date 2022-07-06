@@ -2,19 +2,23 @@ package com.egrf.contactsapp.domain.entity
 
 import com.google.gson.annotations.SerializedName
 
-enum class TemperamentType(val value: String) {
+enum class TemperamentType(private val value: String) {
     @SerializedName("melancholic")
-    MELANCHOLIC("melancholic"),
+    MELANCHOLIC("Melancholic"),
 
     @SerializedName("phlegmatic")
-    PHLEGMATIC("phlegmatic"),
+    PHLEGMATIC("Phlegmatic"),
 
     @SerializedName("sanguine")
-    SANGUINE("sanguine"),
+    SANGUINE("Sanguine"),
 
     @SerializedName("choleric")
-    CHOLERIC("choleric"),
+    CHOLERIC("Choleric"),
 
     @SerializedName("noInfo")
-    NO_INFO("noInfo")
+    NO_INFO("NoInfo");
+
+    override fun toString(): String {
+        return value
+    }
 }
