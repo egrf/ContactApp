@@ -11,8 +11,6 @@ import com.egrf.contactsapp.domain.entity.Contact
 import com.egrf.contactsapp.ui.di.Injector
 import com.egrf.contactsapp.ui.extensions.EMPTY
 import com.egrf.contactsapp.ui.features.base.BaseFragment
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat.forPattern
 
 
 class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
@@ -40,9 +38,9 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
             createDialIntentAndStart()
         }
         binding.temperament.text = contact?.temperament.toString()
-        val educationPeriod =
-            "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
-        binding.educationPeriod.text = educationPeriod
+//        val educationPeriod =
+//            "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
+//        binding.educationPeriod.text = educationPeriod
         binding.biography.text = contact?.biography
         return binding.root
     }
@@ -53,8 +51,8 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         startActivity(intent)
     }
 
-    private fun formatDate(date: DateTime?) =
-        forPattern("dd.MM.yyyy").print(date) ?: ""
+//    private fun formatDate(date: DateTime?) =
+//        forPattern("dd.MM.yyyy").print(date) ?: ""
 
     private fun preparePhoneNumber(phoneNumber: String?) =
         phoneNumber?.let {

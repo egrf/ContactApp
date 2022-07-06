@@ -14,12 +14,21 @@ import javax.inject.Singleton
 @Module(includes = [AppModule.InnerAppModule::class])
 class AppModule(private val context: Context) {
 
+    companion object {
+        private const val PREFS_NAME = "contact_app_prefs"
+    }
+
     @Provides
     fun provideContext() = context
 
     @Singleton
     @Provides
     fun provideDatabaseStorage() = ContactsDatabase.getDatabase(context)
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference() =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     @Module
     interface InnerAppModule {

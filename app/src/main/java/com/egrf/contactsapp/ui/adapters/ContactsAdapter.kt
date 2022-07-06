@@ -2,6 +2,7 @@ package com.egrf.contactsapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.egrf.contactsapp.databinding.ContactItemBinding
@@ -10,9 +11,7 @@ import com.egrf.contactsapp.domain.entity.Contact
 
 class ContactsAdapter(
     private val clickListener: (Contact) -> Unit
-) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
-
-    private var list: MutableList<Contact> = mutableListOf()
+) : PagingDataAdapter<Contact, ContactsAdapter.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ContactItemBinding
@@ -21,21 +20,10 @@ class ContactsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val contact = list[position]
-        holder.bind(contact, clickListener)
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-    fun updateContactList(list: List<Contact>) {
-        val diffCallback = ContactDiffCallback(this.list, list)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-        this.list.clear()
-        this.list.addAll(list)
-        diffResult.dispatchUpdatesTo(this)
+        val contact = getItem(position)
+        if (contact != null) {
+            holder.bind(contact, clickListener)
+        }
     }
 
     class ViewHolder(private val binding: ContactItemBinding) :
@@ -45,6 +33,18 @@ class ContactsAdapter(
             binding.contactPhone.text = contact.phone
             binding.contactHeight.text = contact.height.toString()
             binding.root.setOnClickListener { clickListener(contact) }
+        }
+    }
+
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<Contact>() {
+            override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+                return oldItem.name.equals(newItem.name)
+            }
         }
     }
 }

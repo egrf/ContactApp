@@ -1,12 +1,12 @@
 package com.egrf.contactsapp.domain.entity
 
 import com.google.gson.annotations.SerializedName
-import org.joda.time.DateTime
 import java.io.Serializable
+import java.time.OffsetDateTime
 
 data class EducationPeriod(
     @SerializedName("start")
-    val start: DateTime,
+    val start: OffsetDateTime = OffsetDateTime.now(),
     @SerializedName("end")
-    val end: DateTime,
+    val end: OffsetDateTime = OffsetDateTime.now(),
 ) : Serializable

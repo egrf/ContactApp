@@ -1,11 +1,11 @@
 package com.egrf.contactsapp.data.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.egrf.contactsapp.domain.entity.Contact
-import io.reactivex.Observable
 
 @Dao
 interface ContactDao {
@@ -14,7 +14,7 @@ interface ContactDao {
     fun saveContacts(contacts: List<Contact>)
 
     @Query("SELECT * FROM contact_table ORDER BY id ASC")
-    fun getAllContacts(): Observable<List<Contact>>
+    fun getAllContacts(): PagingSource<Int, Contact>
 
     @Query("DELETE FROM contact_table")
     fun clearAll()

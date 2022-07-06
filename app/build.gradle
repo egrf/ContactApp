@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.egrf.contactsapp"
-        minSdk 23
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -61,8 +61,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
     //Gson
     implementation "com.google.code.gson:gson:$versions.gson"
-    //Joda time
-    implementation "net.danlew:android.joda:$versions.joda"
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
@@ -77,4 +75,8 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+    //Paging
+    implementation "androidx.paging:paging-runtime-ktx:$versions.paging"
+    implementation "androidx.paging:paging-rxjava2-ktx:$versions.paging"
+    implementation "androidx.room:room-paging:$versions.roomPaging"
 }

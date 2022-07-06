@@ -14,11 +14,14 @@ import com.egrf.contactsapp.ui.adapters.ContactsAdapter
 import com.egrf.contactsapp.ui.di.Injector
 import com.egrf.contactsapp.ui.features.base.BaseFragment
 import com.egrf.contactsapp.ui.features.details.ContactDetailsFragment.Companion.CONTACT_PARAM
+import io.reactivex.disposables.CompositeDisposable
 
 class MainFragment : BaseFragment<MainViewModel>() {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var adapter: ContactsAdapter
+
+    private val mDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Injector.mainFragmentComponent.inject(this)
@@ -49,13 +52,18 @@ class MainFragment : BaseFragment<MainViewModel>() {
         )
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.loadContacts()
+            mDisposable.dispose()
             binding.swipeRefreshLayout.isRefreshing = false
         }
-        viewModel.contacts.observe(this.viewLifecycleOwner) { contact ->
+
+        viewModel.fetchContactsEvent.observe(this.viewLifecycleOwner) {
             run {
-                adapter.updateContactList(contact)
+                mDisposable.add(viewModel.fetchContacts().subscribe {
+                    adapter.submitData(lifecycle, it)
+                })
             }
         }
+
         viewModel.loadingState.observe(this.viewLifecycleOwner) { isLoading ->
             run {
                 binding.loading.isGone = !isLoading

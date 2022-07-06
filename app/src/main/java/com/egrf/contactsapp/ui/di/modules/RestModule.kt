@@ -1,18 +1,17 @@
 package com.egrf.contactsapp.ui.di.modules
 
 import com.egrf.contactsapp.data.network.ContactsApi
-import com.egrf.contactsapp.domain.utils.DateTimeConverter
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.*
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.joda.time.DateTime
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
+import java.time.OffsetDateTime
 import javax.inject.Singleton
 
 
@@ -54,8 +53,12 @@ class RestModule {
     @Provides
     fun provideGson() = GsonBuilder()
         .registerTypeAdapter(
-            DateTime::class.java, DateTimeConverter()
-        )
+            OffsetDateTime::class.java,
+            JsonDeserializer { json: JsonElement, type: Type?, context: JsonDeserializationContext? ->
+                OffsetDateTime.parse(
+                    json.asString
+                )
+            } as JsonDeserializer<OffsetDateTime>)
         .create()
 
 }

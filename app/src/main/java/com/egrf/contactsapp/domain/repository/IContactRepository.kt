@@ -1,11 +1,12 @@
 package com.egrf.contactsapp.domain.repository
 
+import androidx.paging.PagingSource
 import com.egrf.contactsapp.domain.entity.Contact
 import io.reactivex.Observable
 
 interface IContactRepository {
 
-    fun loadAllContacts(isFromDatabase: Boolean): Observable<List<Contact>>
+    fun loadAllContacts(): Observable<List<Contact>>
 
-    fun fetchContacts(): Observable<List<Contact>>
+    fun loadContactsFromDatabase(): PagingSource<Int, Contact>
 }
