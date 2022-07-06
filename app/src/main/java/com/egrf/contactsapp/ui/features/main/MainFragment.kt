@@ -5,6 +5,7 @@ import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.egrf.contactsapp.R
@@ -56,12 +57,20 @@ class MainFragment : BaseFragment<MainViewModel>() {
             binding.swipeRefreshLayout.isRefreshing = false
         }
 
-        viewModel.fetchContactsEvent.observe(this.viewLifecycleOwner) {
+        viewModel.fetchContactsFromDb.observe(this.viewLifecycleOwner) { loadFromDb ->
             run {
-                mDisposable.add(viewModel.fetchContacts().subscribe {
-                    adapter.submitData(lifecycle, it)
-                })
+                if (loadFromDb) {
+                    mDisposable.add(viewModel.fetchContacts().subscribe {
+                        adapter.submitData(requireActivity().lifecycle, it)
+                    })
+                } else {
+                    mDisposable.dispose()
+                }
             }
+        }
+
+        viewModel.clearContactListEvent.observe(this.viewLifecycleOwner) {
+            adapter.submitData(lifecycle, PagingData.empty())
         }
 
         viewModel.loadingState.observe(this.viewLifecycleOwner) { isLoading ->
@@ -74,6 +83,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onDestroyView() {
+        mDisposable.dispose()
+        super.onDestroyView()
     }
 
     private fun onContactItemClicked(contact: Contact) {

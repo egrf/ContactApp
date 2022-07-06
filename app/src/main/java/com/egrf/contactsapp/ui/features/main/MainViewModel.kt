@@ -2,6 +2,8 @@ package com.egrf.contactsapp.ui.features.main
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.rxjava2.cachedIn
 import com.egrf.contactsapp.domain.interactors.IContactsInteractor
 import com.egrf.contactsapp.domain.utils.PreferencesHelper
 import com.egrf.contactsapp.ui.extensions.toImmutable
@@ -22,8 +24,11 @@ class MainViewModel @Inject constructor(
 //    private val _contacts = MutableLiveData<List<Contact>>()
 //    val contacts = _contacts.toImmutable()
 
-    private val _fetchContactsEvent = EmptySingleLiveEvent()
-    val fetchContactsEvent = _fetchContactsEvent.toImmutable()
+    private val _clearContactListEvent = EmptySingleLiveEvent()
+    val clearContactListEvent = _clearContactListEvent.toImmutable()
+
+    private val _fetchContactsFromDb = MutableLiveData<Boolean>()
+    val fetchContactsFromDb = _fetchContactsFromDb.toImmutable()
 
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState = _loadingState.toImmutable()
@@ -40,6 +45,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadContacts() {
+        _fetchContactsFromDb.value = false
         val lastUpdateTimeString = sharedPrefs.getString(LAST_UPDATE_TIME_KEY)
         return if (!lastUpdateTimeString.isNullOrBlank()) {
             val lastUpdateTime = LocalDateTime.parse(lastUpdateTimeString, formatter)
@@ -48,7 +54,7 @@ class MainViewModel @Inject constructor(
                 loadFromInternet()
             } else {
                 Log.d("YAYAYA", "getAllContacts from the db: ")
-                _fetchContactsEvent.call()
+                _fetchContactsFromDb.value = true
             }
         } else {
             Log.d("YAYAYA", "getAllContacts for the first time: ")
@@ -63,17 +69,18 @@ class MainViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 _loadingState.value = true
+                _clearContactListEvent.call()
             }
             .doOnComplete {
                 _loadingState.value = false
                 sharedPrefs.putString(LAST_UPDATE_TIME_KEY, LocalDateTime.now().format(formatter))
-                _fetchContactsEvent.call()
+                _fetchContactsFromDb.value = true
             }.subscribe({}, { error ->
                 Log.d("YAYAYA", "loadContacts: ${error.cause}")
             })
     }
 
-    fun fetchContacts() = contactsInteractor.getContacts()
+    fun fetchContacts() = contactsInteractor.getContacts().cachedIn(viewModelScope)
 
 }
 

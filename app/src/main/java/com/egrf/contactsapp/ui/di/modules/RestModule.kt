@@ -59,6 +59,12 @@ class RestModule {
                     json.asString
                 )
             } as JsonDeserializer<OffsetDateTime>)
+        .registerTypeAdapter(OffsetDateTime::class.java,
+            JsonSerializer { src: OffsetDateTime, typeOfSrc: Type?, context: JsonSerializationContext? ->
+                JsonPrimitive(
+                    src.toString()
+                )
+            } as JsonSerializer<OffsetDateTime>)
         .create()
 
 }

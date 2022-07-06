@@ -11,6 +11,8 @@ import com.egrf.contactsapp.domain.entity.Contact
 import com.egrf.contactsapp.ui.di.Injector
 import com.egrf.contactsapp.ui.extensions.EMPTY
 import com.egrf.contactsapp.ui.features.base.BaseFragment
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 
 class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
@@ -38,9 +40,9 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
             createDialIntentAndStart()
         }
         binding.temperament.text = contact?.temperament.toString()
-//        val educationPeriod =
-//            "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
-//        binding.educationPeriod.text = educationPeriod
+        val educationPeriod =
+            "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
+        binding.educationPeriod.text = educationPeriod
         binding.biography.text = contact?.biography
         return binding.root
     }
@@ -51,8 +53,8 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         startActivity(intent)
     }
 
-//    private fun formatDate(date: DateTime?) =
-//        forPattern("dd.MM.yyyy").print(date) ?: ""
+    private fun formatDate(date: OffsetDateTime?) =
+        date?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) ?: ""
 
     private fun preparePhoneNumber(phoneNumber: String?) =
         phoneNumber?.let {
@@ -65,6 +67,7 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
 
     companion object {
         private const val PHONE_REGEX = "[^0-9]"
+
         const val CONTACT_PARAM = "CONTACT_PARAM"
     }
 
