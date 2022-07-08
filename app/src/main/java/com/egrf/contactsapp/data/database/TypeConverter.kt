@@ -14,16 +14,16 @@ class TypeConverter {
     fun stringToPeriod(data: String?): EducationPeriod {
         val json = JSONObject(data)
         return EducationPeriod(
-            toOffsetDateTime(json.getString("start")),
-            toOffsetDateTime(json.getString("end"))
+            toOffsetDateTime(json.getString(EducationPeriod.FIELD_START)),
+            toOffsetDateTime(json.getString(EducationPeriod.FIELD_END))
         )
     }
 
     @TypeConverter
     fun periodToString(educationPeriod: EducationPeriod): String {
         return JSONObject().apply {
-            put("start", fromOffsetDateTime(educationPeriod.start))
-            put("end", fromOffsetDateTime(educationPeriod.end))
+            put(EducationPeriod.FIELD_START, fromOffsetDateTime(educationPeriod.start))
+            put(EducationPeriod.FIELD_END, fromOffsetDateTime(educationPeriod.end))
         }.toString()
     }
 

@@ -29,22 +29,22 @@ class ContactsAdapter(
     class ViewHolder(private val binding: ContactItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(contact: Contact, clickListener: (Contact) -> Unit) {
-            binding.contactName.text = contact.name
-            binding.contactPhone.text = contact.phone
-            binding.contactHeight.text = contact.height.toString()
-            binding.root.setOnClickListener { clickListener(contact) }
+            with(binding) {
+                contactName.text = contact.name
+                contactPhone.text = contact.phone
+                contactHeight.text = contact.height.toString()
+                root.setOnClickListener { clickListener(contact) }
+            }
         }
     }
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<Contact>() {
-            override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-                return oldItem.id == newItem.id
-            }
+            override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean =
+                oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-                return oldItem.name.equals(newItem.name)
-            }
+            override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean =
+                oldItem.name.equals(newItem.name)
         }
     }
 }

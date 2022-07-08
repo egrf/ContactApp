@@ -10,7 +10,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
 import java.time.OffsetDateTime
 import javax.inject.Singleton
 
@@ -30,7 +29,7 @@ class RestModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient) = Retrofit.Builder()
+    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
@@ -41,26 +40,27 @@ class RestModule {
     @Provides
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor
-    ) = OkHttpClient.Builder()
+    ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
         .build()
 
     @Singleton
     @Provides
-    fun provideLogger() = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    fun provideLogger(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     @Singleton
     @Provides
-    fun provideGson() = GsonBuilder()
+    fun provideGson(): Gson = GsonBuilder()
         .registerTypeAdapter(
             OffsetDateTime::class.java,
-            JsonDeserializer { json: JsonElement, type: Type?, context: JsonDeserializationContext? ->
+            JsonDeserializer { json, _, _ ->
                 OffsetDateTime.parse(
                     json.asString
                 )
             } as JsonDeserializer<OffsetDateTime>)
         .registerTypeAdapter(OffsetDateTime::class.java,
-            JsonSerializer { src: OffsetDateTime, typeOfSrc: Type?, context: JsonSerializationContext? ->
+            JsonSerializer { src: OffsetDateTime, _, _ ->
                 JsonPrimitive(
                     src.toString()
                 )

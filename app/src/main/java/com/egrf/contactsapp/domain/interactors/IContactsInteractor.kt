@@ -34,7 +34,6 @@ class ContactsInteractor @Inject constructor(
     override fun getAllContacts(forceRefresh: Boolean): Observable<List<Contact>> =
         repository.loadAllContacts().subscribeOn(Schedulers.io())
 
-
     override fun getContacts(): Flowable<PagingData<Contact>> =
         Pager(
             config = PagingConfig(
@@ -46,7 +45,6 @@ class ContactsInteractor @Inject constructor(
         ) {
             repository.loadContactsFromDatabase()
         }.flowable
-
 
     override fun searchContacts(searchText: String): Flowable<PagingData<Contact>> =
         Pager(

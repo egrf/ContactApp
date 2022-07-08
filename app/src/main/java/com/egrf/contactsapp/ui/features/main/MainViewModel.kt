@@ -41,7 +41,7 @@ class MainViewModel @Inject constructor(
     val loadingState = _loadingState.toImmutable()
 
     private var connectionStatus = ConnectionStatus.NONE
-    private var isInited = false
+    private var isInitialized = false
     private var disposable: Disposable? = null
     var lastSearchQuery = String.EMPTY
 
@@ -51,29 +51,35 @@ class MainViewModel @Inject constructor(
     }
 
     fun init() {
-        if (!isInited) {
+        if (!isInitialized) {
             loadContacts()
-            isInited = true
+            isInitialized = true
+        }
+        if (lastSearchQuery == String.EMPTY) {
+            loadContacts()
         }
     }
 
     fun loadContacts() {
         _fetchContactsFromDb.value = false
-        val lastUpdateTimeString = sharedPrefs.getString(LAST_UPDATE_TIME_KEY)
-        return if (!lastUpdateTimeString.isNullOrBlank()) {
-            val lastUpdateTime = LocalDateTime.parse(lastUpdateTimeString, formatter)
-            if (LocalDateTime.now().isAfter(lastUpdateTime.plusMinutes(1))) {
-                loadFromInternet()
-            } else {
-                if (connectionStatus == ConnectionStatus.NONE) {
-                    _loadFromDbEvent.call()
+        if (lastSearchQuery == String.EMPTY) {
+            val lastUpdateTimeString = sharedPrefs.getString(LAST_UPDATE_TIME_KEY)
+            return if (!lastUpdateTimeString.isNullOrBlank()) {
+                val lastUpdateTime = LocalDateTime.parse(lastUpdateTimeString, formatter)
+                if (LocalDateTime.now().isAfter(lastUpdateTime.plusMinutes(1))) {
+                    loadFromInternet()
+                } else {
+                    if (connectionStatus == ConnectionStatus.NONE) {
+                        _loadFromDbEvent.call()
+                    }
+                    _fetchContactsFromDb.value = true
                 }
-                _fetchContactsFromDb.value = true
+            } else {
+                loadFromInternet()
             }
         } else {
-            loadFromInternet()
+            searchContacts(lastSearchQuery)
         }
-
     }
 
     private fun loadFromInternet() {
@@ -92,9 +98,9 @@ class MainViewModel @Inject constructor(
                         LocalDateTime.now().format(formatter)
                     )
                     _fetchContactsFromDb.value = true
-                }.subscribe({}, {
+                }.subscribe {
                     _loadingErrorEvent.call()
-                })
+                }
         } else {
             _loadFromDbEvent.call()
             _fetchContactsFromDb.value = true

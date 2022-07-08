@@ -18,6 +18,6 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment(),
     protected abstract fun injectViewModel()
 
     protected inline fun <reified T : ViewModel> getViewModel(): T =
-        ViewModelProvider(this, viewModelFactory).get(T::class.java)
+        ViewModelProvider(this, viewModelFactory)[T::class.java]
 
 }

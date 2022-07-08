@@ -30,7 +30,7 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         Injector.contactDetailsFragmentComponent.inject(this)
         requireActivity().actionBar?.setDisplayHomeAsUpEnabled(true)
         arguments?.let {
-            contact = it.getSerializable(CONTACT_PARAM) as Contact
+            contact = it.getSerializable(CONTACT_PARAM) as? Contact
         }
     }
 
@@ -39,17 +39,18 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentContactDetailsBinding.inflate(inflater, container, false)
-
-        binding.name.text = contact?.name
-        binding.phone.text = contact?.phone
-        binding.phone.setOnClickListener {
-            createDialIntentAndStart()
+        with(binding) {
+            name.text = contact?.name
+            phone.text = contact?.phone
+            phone.setOnClickListener {
+                createDialIntentAndStart()
+            }
+            temperament.text = contact?.temperament.toString()
+            val educationPeriodText =
+                "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
+            educationPeriod.text = educationPeriodText
+            biography.text = contact?.biography
         }
-        binding.temperament.text = contact?.temperament.toString()
-        val educationPeriod =
-            "${formatDate(contact?.educationPeriod?.start)} - ${formatDate(contact?.educationPeriod?.end)}"
-        binding.educationPeriod.text = educationPeriod
-        binding.biography.text = contact?.biography
         return binding.root
     }
 
@@ -57,8 +58,7 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         navController = findNavController()
         val config = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, config)
-        
-        super.onViewCreated(view,savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun createDialIntentAndStart() {
@@ -68,11 +68,11 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
     }
 
     private fun formatDate(date: OffsetDateTime?) =
-        date?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) ?: ""
+        date?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) ?: String.EMPTY
 
     private fun preparePhoneNumber(phoneNumber: String?) =
         phoneNumber?.let {
-            Regex(PHONE_REGEX).replace(phoneNumber, "")
+            Regex(PHONE_REGEX).replace(phoneNumber, String.EMPTY)
         } ?: String.EMPTY
 
     override fun injectViewModel() {
@@ -81,7 +81,6 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
 
     companion object {
         private const val PHONE_REGEX = "[^0-9]"
-
         const val CONTACT_PARAM = "CONTACT_PARAM"
     }
 

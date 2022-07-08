@@ -14,14 +14,10 @@ object Injector {
 
 
     val mainFragmentComponent: MainFragmentComponent
-        get() {
-            return appComponent.mainFragmentComponent
-        }
+        get() = appComponent.mainFragmentComponent
 
     val contactDetailsFragmentComponent: ContactDetailsFragmentComponent
-    get() {
-        return appComponent.contactDetailsFragmentComponent
-    }
+        get() = appComponent.contactDetailsFragmentComponent
 
     fun initAppComponent(context: Context) {
         appComponent = DaggerAppComponent.builder()

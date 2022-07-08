@@ -1,6 +1,7 @@
 package com.egrf.contactsapp.ui.di.modules
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.egrf.contactsapp.data.database.ContactsDatabase
 import com.egrf.contactsapp.data.repository.ContactRepository
 import com.egrf.contactsapp.domain.interactors.ContactsInteractor
@@ -19,15 +20,15 @@ class AppModule(private val context: Context) {
     }
 
     @Provides
-    fun provideContext() = context
+    fun provideContext(): Context = context
 
     @Singleton
     @Provides
-    fun provideDatabaseStorage() = ContactsDatabase.getDatabase(context)
+    fun provideDatabaseStorage(): ContactsDatabase = ContactsDatabase.getDatabase(context)
 
     @Singleton
     @Provides
-    fun provideSharedPreference() =
+    fun provideSharedPreference(): SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     @Module

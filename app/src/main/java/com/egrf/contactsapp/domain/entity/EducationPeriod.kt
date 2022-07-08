@@ -5,8 +5,15 @@ import java.io.Serializable
 import java.time.OffsetDateTime
 
 data class EducationPeriod(
-    @SerializedName("start")
+    @SerializedName(FIELD_START)
     val start: OffsetDateTime = OffsetDateTime.now(),
-    @SerializedName("end")
+    @SerializedName(FIELD_END)
     val end: OffsetDateTime = OffsetDateTime.now(),
-) : Serializable
+) : Serializable {
+
+    companion object {
+        const val FIELD_START = "start"
+        const val FIELD_END = "end"
+    }
+
+}
