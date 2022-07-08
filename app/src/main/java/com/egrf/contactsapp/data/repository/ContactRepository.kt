@@ -20,9 +20,9 @@ class ContactRepository @Inject constructor(
 
     override fun loadAllContacts(): Observable<List<Contact>> {
         return Observable.zip(
-            getContactsFromFirstSource().subscribeOn(Schedulers.io()),
-            getContactsFromSecondSource().subscribeOn(Schedulers.io()),
-            getContactsFromThirdSource().subscribeOn(Schedulers.io())
+            api.getFromFirstSource().subscribeOn(Schedulers.io()),
+            api.getFromSecondSource().subscribeOn(Schedulers.io()),
+            api.getFromThirdSource().subscribeOn(Schedulers.io())
         ) { firstList, secondList, thirdList ->
             saveContacts(firstList, secondList, thirdList)
         }
@@ -36,18 +36,6 @@ class ContactRepository @Inject constructor(
         val finalList = firstList + secondList + thirdList
         onNext(finalList)
         return finalList
-    }
-
-    private fun getContactsFromFirstSource(): Observable<List<Contact>> {
-        return api.getFromFirstSource()
-    }
-
-    private fun getContactsFromSecondSource(): Observable<List<Contact>> {
-        return api.getFromSecondSource()
-    }
-
-    private fun getContactsFromThirdSource(): Observable<List<Contact>> {
-        return api.getFromThirdSource()
     }
 
     override fun loadContactsFromDatabase(): PagingSource<Int, Contact> =

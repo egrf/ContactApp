@@ -22,6 +22,4 @@ interface ContactDao {
     @Query("SELECT * FROM contact_table WHERE name LIKE :searchText OR phone LIKE :searchText")
     fun searchContact(searchText: String): PagingSource<Int, Contact>
 
-    @Query("SELECT * FROM contact_table WHERE name LIKE :searchText OR phone LIKE :searchText")
-    fun searchContactList(searchText: String): List<Contact>
 }

@@ -3,4 +3,5 @@
     <string name="search">Поиск</string>
     <string name="contacts_not_found">Контакты не найдены</string>
     <string name="back">Назад</string>
+    <string name="no_internet_connection">Нет подключения к сети</string>
 </resources>
