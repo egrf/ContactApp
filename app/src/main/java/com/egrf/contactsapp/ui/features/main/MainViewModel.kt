@@ -98,9 +98,9 @@ class MainViewModel @Inject constructor(
                         LocalDateTime.now().format(formatter)
                     )
                     _fetchContactsFromDb.value = true
-                }.subscribe {
-                    _loadingErrorEvent.call()
                 }
+                .doOnError { _loadingErrorEvent.call() }
+                .subscribe()
         } else {
             _loadFromDbEvent.call()
             _fetchContactsFromDb.value = true
