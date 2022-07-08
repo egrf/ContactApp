@@ -3,12 +3,15 @@ package com.egrf.contactsapp.ui.features.main
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
+import com.egrf.contactsapp.domain.entity.Contact
 import com.egrf.contactsapp.domain.interactors.IContactsInteractor
 import com.egrf.contactsapp.domain.utils.PreferencesHelper
 import com.egrf.contactsapp.ui.extensions.toImmutable
 import com.egrf.contactsapp.ui.features.base.BaseViewModel
 import com.egrf.contactsapp.ui.utils.EmptySingleLiveEvent
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -20,9 +23,6 @@ class MainViewModel @Inject constructor(
     private val contactsInteractor: IContactsInteractor,
     private val sharedPrefs: PreferencesHelper
 ) : BaseViewModel() {
-
-//    private val _contacts = MutableLiveData<List<Contact>>()
-//    val contacts = _contacts.toImmutable()
 
     private val _clearContactListEvent = EmptySingleLiveEvent()
     val clearContactListEvent = _clearContactListEvent.toImmutable()
@@ -80,7 +80,10 @@ class MainViewModel @Inject constructor(
             })
     }
 
-    fun fetchContacts() = contactsInteractor.getContacts().cachedIn(viewModelScope)
+    fun searchContacts(searchText: String): Flowable<PagingData<Contact>> =
+        contactsInteractor.searchContacts(searchText).cachedIn(viewModelScope)
+
+    fun fetchAllContacts() = contactsInteractor.getContacts().cachedIn(viewModelScope)
 
 }
 

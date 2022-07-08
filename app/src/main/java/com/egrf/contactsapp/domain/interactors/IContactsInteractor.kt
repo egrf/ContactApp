@@ -17,6 +17,8 @@ interface IContactsInteractor {
 
     fun getContacts(): Flowable<PagingData<Contact>>
 
+    fun searchContacts(searchText: String): Flowable<PagingData<Contact>>
+
 }
 
 class ContactsInteractor @Inject constructor(
@@ -45,5 +47,17 @@ class ContactsInteractor @Inject constructor(
             repository.loadContactsFromDatabase()
         }.flowable
 
+
+    override fun searchContacts(searchText: String): Flowable<PagingData<Contact>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = true,
+                prefetchDistance = PREFETCH_SIZE,
+                maxSize = MAX_SIZE
+            )
+        ) {
+            repository.searchContacts(searchText)
+        }.flowable
 
 }

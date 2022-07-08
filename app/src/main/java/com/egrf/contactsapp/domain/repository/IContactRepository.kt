@@ -9,4 +9,7 @@ interface IContactRepository {
     fun loadAllContacts(): Observable<List<Contact>>
 
     fun loadContactsFromDatabase(): PagingSource<Int, Contact>
+
+    fun searchContacts(searchText: String): PagingSource<Int, Contact>
+
 }

@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.egrf.contactsapp.databinding.FragmentContactDetailsBinding
 import com.egrf.contactsapp.domain.entity.Contact
 import com.egrf.contactsapp.ui.di.Injector
@@ -19,6 +23,7 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
 
     private var contact: Contact? = null
     private lateinit var binding: FragmentContactDetailsBinding
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +39,7 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentContactDetailsBinding.inflate(inflater, container, false)
+
         binding.name.text = contact?.name
         binding.phone.text = contact?.phone
         binding.phone.setOnClickListener {
@@ -45,6 +51,14 @@ class ContactDetailsFragment : BaseFragment<ContactDetailsViewModel>() {
         binding.educationPeriod.text = educationPeriod
         binding.biography.text = contact?.biography
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navController = findNavController()
+        val config = AppBarConfiguration(navController.graph)
+        binding.toolbar.setupWithNavController(navController, config)
+        
+        super.onViewCreated(view,savedInstanceState)
     }
 
     private fun createDialIntentAndStart() {

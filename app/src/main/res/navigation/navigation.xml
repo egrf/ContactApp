@@ -11,9 +11,7 @@
         android:label="ContactApp">
         <action
             android:id="@+id/navigateToContactDetails"
-            app:destination="@id/contactDetailsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/slide_in_left" />
+            app:destination="@id/contactDetailsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/contactDetailsFragment"

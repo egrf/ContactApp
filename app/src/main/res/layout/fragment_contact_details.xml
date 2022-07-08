@@ -4,19 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".ui.features.details.ContactDetailsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/color_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <TextView
         android:id="@+id/name"
         style="@style/Text24sp.Bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_editor_absoluteY="16dp" />
 
     <TextView
@@ -24,6 +36,7 @@
         style="@style/Text18sp.Medium.Blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
         android:ellipsize="end"
@@ -39,6 +52,7 @@
         style="@style/Text16sp.Medium.Gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -51,6 +65,7 @@
         style="@style/Text18sp.Medium.Gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -62,6 +77,7 @@
         android:id="@+id/biography_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +92,6 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:ellipsize="end" />
-
 
     </ScrollView>
 
